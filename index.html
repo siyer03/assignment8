@@ -1,0 +1,83 @@
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>API</title>
+</head>
+
+<body>
+    
+<h1>USD Currency Exchange Rates</h1>
+
+<button type="button" onclick="showData1()">Show Exchange Rates (AJAX Pattern)</button>
+<br><br>
+<div id="page1"></div>
+
+<br>
+
+<button type="button" onclick="showData2()">Show Exchange Rates (Fetch)</button>
+<br><br>
+<div id="page2"></div>
+
+<br><br>
+<div>
+    The API I selected includes data on currency exchange rates. It lists exchange rates for nearly all other currencies around the world with the USD. 
+    <br>
+    I decided to include just the currencies that are most frequently traded with the USD.
+    <br><br>
+    I found the API on this website: https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/
+    <br><br>
+    Options used:
+    <br>
+    The XMLHttpRequest sends and receives data from the web server.
+    <br>
+    The open method gets the file to be processed.
+    <br>
+    onreadystatechange is an event handler that is triggered when there's a change in the readystate value.
+    <br>
+    The readystate and status are used to check which condition should be followed.
+    <br>
+    The send method then sends the request.
+    <br><br>
+    This API would be useful for any financial services company as exchange rates affect daily operations / trading, so perhaps it could be used in their internal databases / systems. 
+    <br>
+    It may also be useful for news companies / sources to have on their dashboards, since the general public is also interested in exchange rates.
+</div>
+
+<script>
+
+function showData1()
+{
+    var request = new XMLHttpRequest();
+    
+    request.open('GET', 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json', true);
+
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            var data = JSON.parse(request.responseText);
+            document.getElementById('page1').innerHTML = 'EUR: ' + data.usd.eur + '<br>AUD: ' + data.usd.aud + '<br>CAD: ' + data.usd.cad + '<br>GBP: ' + data.usd.gbp + '<br>CHF: ' + data.usd.chf + '<br>INR: ' + data.usd.inr + '<br>JPY: ' + data.usd.jpy;
+        } else if (request.readyState == 4) {
+            document.getElementById('page1').innerHTML = 'Error: ' + request.statusText;
+        }
+    };
+    
+    request.send();
+
+}
+
+function showData2()
+{
+    fetch('https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json')
+    .then (response => response.json())
+    .then (data => {
+        document.getElementById('page2').innerHTML = 'EUR: ' + data.usd.eur + '<br>AUD: ' + data.usd.aud + '<br>CAD: ' + data.usd.cad + '<br>GBP: ' + data.usd.gbp + '<br>CHF: ' + data.usd.chf + '<br>INR: ' + data.usd.inr + '<br>JPY: ' + data.usd.jpy;
+    })
+    .catch (error => document.getElementById('page2').innerHTML = 'Error: ' + error.message);
+
+}
+
+
+</script>
+
+</body>
+
+</html>
